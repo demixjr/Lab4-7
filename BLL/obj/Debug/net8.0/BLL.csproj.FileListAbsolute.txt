@@ -1,0 +1,15 @@
+D:\oop\c#\course2\Lab7\BLL\bin\Debug\net8.0\BLL.deps.json
+D:\oop\c#\course2\Lab7\BLL\bin\Debug\net8.0\BLL.dll
+D:\oop\c#\course2\Lab7\BLL\bin\Debug\net8.0\BLL.pdb
+D:\oop\c#\course2\Lab7\BLL\bin\Debug\net8.0\DAL.dll
+D:\oop\c#\course2\Lab7\BLL\bin\Debug\net8.0\DAL.pdb
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.csproj.AssemblyReference.cache
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.AssemblyInfoInputs.cache
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.AssemblyInfo.cs
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.csproj.CoreCompileInputs.cache
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.csproj.Up2Date
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.dll
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\refint\BLL.dll
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.pdb
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\ref\BLL.dll
