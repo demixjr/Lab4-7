@@ -24,36 +24,10 @@ namespace PL.Controllers
             facade = service;
             this.mapper = mapper;
         }
-        [HttpPost("add")]
-        [Authorize]
-        public ActionResult<AnnouncementResponseModel> AddAnnouncement([FromBody] AnnouncementRequestModel requestModel)
-        {
-            try
-            {
-                var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                if (username == null)
-                    return Forbid();
 
-                var tags = requestModel.Tags;
-                List<string> strTags = new List<string>();
-                foreach (var tag in tags)
-                {
-                    strTags.Add(tag.Name);
-                }
-                var dto = mapper.Map<AnnouncementDto>(requestModel);
-                facade.AddAnnouncement(requestModel.Title, requestModel.Description, requestModel.Category.Name, requestModel.Subcategory.Name, strTags, username);
-                return Ok(mapper.Map<AnnouncementResponseModel>(dto));
-
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        
         [HttpGet("announcements")]
-        [AllowAnonymous]
-        public ActionResult<AnnouncementResponseModel> GetAllSubcategories()
+
+        public ActionResult<AnnouncementResponseModel> GetAllAnnouncements()
         {
             try
             {
@@ -70,12 +44,123 @@ namespace PL.Controllers
             }
 
         }
-        [HttpDelete]
+        [HttpGet("my-announcements")]
         [Authorize]
-        public ActionResult<AnnouncementResponseModel> DeleteAnnouncement(string title)
+        public ActionResult<AnnouncementResponseModel> MyAnnouncements()
         {
             try
             {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return Unauthorized(new { message = "Потрібна авторизація" });
+                }
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                if (username == null)
+                    return Forbid("Увійдіть в акаунт");
+                var announcements = facade.FindUsersAnnouncements(username);
+                var dto = mapper.Map<List<AnnouncementResponseModel>>(announcements);
+                return Ok(dto);
+            }
+            catch (EntityNotFoundException enf)
+            {
+                return BadRequest(new { message = enf.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
+            }
+        }
+
+        [HttpPost("add")]
+        [Authorize]
+        public ActionResult<string> AddAnnouncement([FromBody] AnnouncementRequestModel requestModel)
+        {
+            try
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return Unauthorized(new { message = "Потрібна авторизація" });
+                }
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                if (username == null)
+                    return Forbid("Увійдіть в акаунт");
+
+                var tags = requestModel.Tags;
+                List<string> strTags = new List<string>();
+                foreach (var tag in tags)
+                {
+                    strTags.Add(tag.Name);
+                }
+                var dto = mapper.Map<AnnouncementDto>(requestModel);
+                facade.AddAnnouncement(requestModel.Title, requestModel.Description, requestModel.Category.Name, requestModel.Subcategory.Name, strTags, username);
+                return Ok("Оголошення додано");
+
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException enf)
+            {
+                return BadRequest(new { message = enf.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
+            }
+        }
+
+        [HttpPut("change")]
+        [Authorize]
+        public ActionResult<string> ChangeAnnouncement([FromBody] AnnouncementRequestModel requestModel)
+        {
+            try
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return Unauthorized(new { message = "Потрібна авторизація" });
+                }
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                if (username == null)
+                    return Forbid();
+
+                var tags = requestModel.Tags;
+                List<string> strTags = new List<string>();
+                foreach (var tag in tags)
+                {
+                    strTags.Add(tag.Name);
+                }
+                var dto = mapper.Map<AnnouncementDto>(requestModel);
+                if (facade.ChangeAnnouncement(requestModel.Title, requestModel.Description, requestModel.Category.Name, requestModel.Subcategory.Name, strTags, username))
+                    return Ok("Оголошення успішно змінено");
+                else
+                    return BadRequest("Не вдалося змінити оголошення");
+
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException enf)
+            {
+                return BadRequest(new { message = enf.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
+            }
+        }
+
+        [HttpDelete("delete/{title}")]
+        [Authorize]
+        public ActionResult<string> DeleteAnnouncement(string title)
+        {
+            try
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return Unauthorized(new { message = "Потрібна авторизація" });
+                }
                 var username = User.FindFirst(ClaimTypes.Name)?.Value;
                 if (username == null)
                     return Forbid();
@@ -84,7 +169,7 @@ namespace PL.Controllers
                 if (ann.Username == username)
                 {
                     facade.DeleteAnnouncement(title, username);
-                    return Ok();
+                    return Ok($"Оголошення {title} видалено");
                 }
                 else
                     return BadRequest("Імя користувача і автора не співпадає");

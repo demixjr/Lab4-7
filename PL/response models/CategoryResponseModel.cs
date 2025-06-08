@@ -9,6 +9,7 @@ namespace PL.response_models
     public class CategoryResponseModel
     {
         public string Name { get; set; }
+        [JsonIgnore]
         public int CategoryId { get; set; }
         public List<SubcategoryResponseModel> Subcategories { get; set; }  = new List<SubcategoryResponseModel>();
 

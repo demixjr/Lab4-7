@@ -79,16 +79,11 @@ namespace BLL
                 return false;
             }
         }
-        public string FindUsersAnnouncements(string username)
+        public List<AnnouncementDto> FindUsersAnnouncements(string username)
         {
             UserDto userDto = userService.FindUserByUsername(unitOfWork, username);
             var announcements = userDto.Announcements;
-            string allAnnouncements = "";
-            foreach (var announcement in announcements)
-            {
-                allAnnouncements += "";
-            }
-            return allAnnouncements;
+            return announcements;
         }
         public UserDto FindUser(string username)
         {
@@ -264,7 +259,7 @@ namespace BLL
                 throw new EntityNotFoundException("Такого користувача не існує");
             }
 
-            // Временно используем List для наполнения
+  
             List<TagDto> tagList = new List<TagDto>();
 
             foreach (string tagName in tagNames)
@@ -275,7 +270,6 @@ namespace BLL
                 tagList.Add(tag);
             }
 
-            // Преобразуем в IQueryable
             List<TagDto> tags = tagList;
 
             if (announcementService.FindAnnouncementByTitle(unitOfWork, title) != null)
@@ -296,7 +290,7 @@ namespace BLL
                     Category = new CategoryDto { Name = categoryName },
                     Username = username,
                     Subcategory = new SubcategoryDto { Name = subcategoryName },
-                    Tags = tags // это IQueryable<TagDto>
+                    Tags = tags 
                 };
 
                 announcementService.AddAnnouncement(unitOfWork, announcementDto);
@@ -306,6 +300,54 @@ namespace BLL
             return false;
         }
 
+        public bool ChangeAnnouncement(string title, string description, string categoryName, string subcategoryName, List<string> tagNames, string username)
+        {
+                UserDto user = userService.FindUserByUsername(unitOfWork, username);
+                if (user == null)
+                {
+                    throw new EntityNotFoundException("Такого користувача не існує");
+                }
+
+                List<TagDto> tagList = new List<TagDto>();
+
+                foreach (string tagName in tagNames)
+                {
+                    var tag = FindTag(tagName);
+                    if (tag == null)
+                        throw new EntityNotFoundException("Тег не знайдено");
+                    tagList.Add(tag);
+                }
+
+                List<TagDto> tags = tagList;
+
+                if (announcementService.FindAnnouncementByTitle(unitOfWork, title) != null)
+                    throw new ValidationException("Уже існує оголошення з такою назвою");
+
+                if (categoryService.FindCategory(unitOfWork, categoryName) == null)
+                    throw new EntityNotFoundException("Таку категорію не знайдено");
+
+                if (subcategoryService.FindSubcategory(unitOfWork, subcategoryName) == null)
+                    throw new EntityNotFoundException("Таку підкатегорію не знайдено");
+
+                if (validation.IsNameValid(title) && validation.IsDescriptionValid(description))
+                {
+                    AnnouncementDto announcementDto = new AnnouncementDto
+                    {
+                        Title = title,
+                        Description = description,
+                        Category = new CategoryDto { Name = categoryName },
+                        Username = username,
+                        Subcategory = new SubcategoryDto { Name = subcategoryName },
+                        Tags = tags 
+                    };
+
+                    announcementService.ChangeAnnouncement(unitOfWork, announcementDto);
+                    return true;
+                }
+                return false;
+            }
+
+        
         public AnnouncementDto FindAnnouncement(string name)
         {
             if (validation.IsNameValid(name))

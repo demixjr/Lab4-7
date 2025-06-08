@@ -1,32 +1,6 @@
 [
   {
     "ContainingType": "PL.Controllers.AnnouncementController",
-    "Method": "DeleteAnnouncement",
-    "RelativePath": "api/Announcement",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "title",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "PL.response_models.AnnouncementResponseModel",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "PL.Controllers.AnnouncementController",
     "Method": "AddAnnouncement",
     "RelativePath": "api/Announcement/add",
     "HttpMethod": "POST",
@@ -41,6 +15,26 @@
     ],
     "ReturnTypes": [
       {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PL.Controllers.AnnouncementController",
+    "Method": "GetAllAnnouncements",
+    "RelativePath": "api/Announcement/announcements",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
         "Type": "PL.response_models.AnnouncementResponseModel",
         "MediaTypes": [
           "text/plain",
@@ -53,8 +47,60 @@
   },
   {
     "ContainingType": "PL.Controllers.AnnouncementController",
-    "Method": "GetAllSubcategories",
-    "RelativePath": "api/Announcement/announcements",
+    "Method": "ChangeAnnouncement",
+    "RelativePath": "api/Announcement/change",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "requestModel",
+        "Type": "PL.request_models.AnnouncementRequestModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PL.Controllers.AnnouncementController",
+    "Method": "DeleteAnnouncement",
+    "RelativePath": "api/Announcement/delete/{title}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "title",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PL.Controllers.AnnouncementController",
+    "Method": "MyAnnouncements",
+    "RelativePath": "api/Announcement/my-announcements",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -74,7 +120,7 @@
   {
     "ContainingType": "PL.Controllers.CategoryController",
     "Method": "AddCategory",
-    "RelativePath": "api/Category/add-category",
+    "RelativePath": "api/Category/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -100,7 +146,7 @@
   {
     "ContainingType": "PL.Controllers.CategoryController",
     "Method": "GetAllCategories",
-    "RelativePath": "api/Category/get-all-categories",
+    "RelativePath": "api/Category/categories",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -120,7 +166,7 @@
   {
     "ContainingType": "PL.Controllers.HeadingController",
     "Method": "AddHeading",
-    "RelativePath": "api/Heading/add-heading",
+    "RelativePath": "api/Heading/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -133,7 +179,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "PL.response_models.HeadingResponseModel",
+        "Type": "System.String",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -146,7 +192,7 @@
   {
     "ContainingType": "PL.Controllers.HeadingController",
     "Method": "GetAllHeadings",
-    "RelativePath": "api/Heading/get-all-headings",
+    "RelativePath": "api/Heading/headings",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -166,7 +212,7 @@
   {
     "ContainingType": "PL.Controllers.SubcategoryController",
     "Method": "AddSubcategory",
-    "RelativePath": "api/Subcategory/add-subcategory",
+    "RelativePath": "api/Subcategory/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -179,7 +225,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "PL.response_models.SubcategoryResponseModel",
+        "Type": "System.String",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -192,7 +238,7 @@
   {
     "ContainingType": "PL.Controllers.SubcategoryController",
     "Method": "GetAllSubcategories",
-    "RelativePath": "api/Subcategory/get-all-subcategories",
+    "RelativePath": "api/Subcategory/subcategories",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -212,7 +258,7 @@
   {
     "ContainingType": "PL.Controllers.TagController",
     "Method": "AddTag",
-    "RelativePath": "api/Tag/add-tag",
+    "RelativePath": "api/Tag/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -225,7 +271,33 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "PL.response_models.TagResponseModel",
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PL.Controllers.TagController",
+    "Method": "AnnouncementsByTag",
+    "RelativePath": "api/Tag/find-announcements-by-tag/{tag}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tag",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PL.response_models.AnnouncementResponseModel",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -238,7 +310,7 @@
   {
     "ContainingType": "PL.Controllers.TagController",
     "Method": "GetAllTags",
-    "RelativePath": "api/Tag/get-all-tags",
+    "RelativePath": "api/Tag/tags",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -257,8 +329,34 @@
   },
   {
     "ContainingType": "UserController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/user/change-password",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "requestModel",
+        "Type": "PL.request_models.ChangePasswordRequestModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "UserController",
     "Method": "DeleteUser",
-    "RelativePath": "api/user/{username}",
+    "RelativePath": "api/user/delete/{username}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -266,22 +364,6 @@
       {
         "Name": "username",
         "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "UserController",
-    "Method": "ChangePassword",
-    "RelativePath": "api/user/change-password",
-    "HttpMethod": "PATCH",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "requestModel",
-        "Type": "PL.request_models.ChangePasswordRequestModel",
         "IsRequired": true
       }
     ],
@@ -329,7 +411,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "PL.response_models.UserResponseModel",
+        "Type": "System.String",
         "MediaTypes": [
           "text/plain",
           "application/json",

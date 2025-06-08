@@ -13,3 +13,4 @@ D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.dll
 D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\refint\BLL.dll
 D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.pdb
 D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\ref\BLL.dll
+D:\oop\c#\course2\Lab7\BLL\obj\Debug\net8.0\BLL.sourcelink.json

@@ -26,30 +26,35 @@ namespace PL.Controllers
             this.tokenService = tokenService;
         }
 
-        [HttpPost("add-heading")]
-        [AllowAnonymous]
-       // [Authorize]
-        public ActionResult<HeadingResponseModel> AddHeading([FromBody] HeadingRequestModel heading)
+        [HttpPost("add")]
+        [Authorize]
+        public ActionResult<string> AddHeading([FromBody] HeadingRequestModel heading)
         {
             try
-            {  
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return Unauthorized(new { message = "Потрібна авторизація" });
+                }
                 service.AddHeading(heading.Name);
-                var headingDto = mapper.Map<HeadingDto>(heading);
-                var responseModel = mapper.Map<HeadingResponseModel>(headingDto);
-                return Ok(responseModel);
+                return Ok("Заголовок додано");
             }
             catch (ValidationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
-            catch (Exception)
+            catch (EntityNotFoundException enf)
             {
-                return StatusCode(500, "Помилка сервера");
+                return BadRequest(new { message = enf.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
             }
         }
 
 
-        [HttpGet("get-all-headings")]
+        [HttpGet("headings")]
         [AllowAnonymous]
         public ActionResult<HeadingResponseModel> GetAllHeadings()
         {

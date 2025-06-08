@@ -21,30 +21,35 @@ namespace PL.Controllers
             this.mapper = mapper;
         }
 
-        [HttpPost("add-subcategory")]
-        [AllowAnonymous]
-        //[Authorize]
-        public ActionResult<SubcategoryResponseModel> AddSubcategory([FromBody] SubcategoryRequestModel subcategory)
+        [HttpPost("add")]
+        [Authorize]
+        public ActionResult<string> AddSubcategory([FromBody] SubcategoryRequestModel subcategory)
         {
             try
             {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return Unauthorized(new { message = "Потрібна авторизація" });
+                }
                 service.AddSubcategory(subcategory.Name, subcategory.CategoryName);
-                var dto = mapper.Map<SubcategoryDto>(subcategory);
-                var responseModel = mapper.Map<SubcategoryResponseModel>(dto);
-                return Ok(responseModel);
+                return Ok("Тег додано");
             }
             catch (ValidationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
-            catch (Exception)
+            catch (EntityNotFoundException enf)
             {
-                return StatusCode(500, "Помилка сервера");
+                return BadRequest(new { message = enf.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
             }
         }
 
 
-        [HttpGet("get-all-subcategories")]
+        [HttpGet("subcategories")]
         [AllowAnonymous]
         public ActionResult<SubcategoryResponseModel> GetAllSubcategories()
         {

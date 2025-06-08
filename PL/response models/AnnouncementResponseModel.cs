@@ -5,6 +5,7 @@ namespace PL.response_models
 {
     public class AnnouncementResponseModel
     {
+        [JsonIgnore]
         public int AnnouncementId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

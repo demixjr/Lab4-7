@@ -22,13 +22,16 @@ namespace PL.Controllers
             this.mapper = mapper;
         }
 
-        [HttpPost("add-category")]
-        [AllowAnonymous]
-        //[Authorize]
+        [HttpPost("add")]
+        [Authorize]
         public ActionResult<CategoryResponseModel> AddCategory([FromBody] CategoryRequestModel category)
         {
             try
             {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return Unauthorized(new { message = "Потрібна авторизація" });
+                }
                 if (service.AddCategory(category.Name, category.Heading.Name))
                 {
                     return Ok("Категорію додано");
@@ -39,16 +42,20 @@ namespace PL.Controllers
             }
             catch (ValidationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
-            catch (Exception)
+            catch (EntityNotFoundException enf)
             {
-                return StatusCode(500, "Помилка сервера");
+                return BadRequest(new { message = enf.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
             }
         }
 
 
-        [HttpGet("get-all-categories")]
+        [HttpGet("categories")]
         [AllowAnonymous]
         public ActionResult<CategoryResponseModel> GetAllCategories()
         {

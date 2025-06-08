@@ -54,7 +54,7 @@ namespace PL
                     Scheme = "bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "¬веди токен в формате: Bearer {твой_токен}"
+                    Description = "¬вед≥ть св≥й токен"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement

@@ -4,6 +4,7 @@ namespace PL.response_models
 {
     public class SubcategoryResponseModel
     {
+        [JsonIgnore]
         public int SubcategoryId { get; set; }
         public string Name { get; set; }
 

@@ -5,7 +5,7 @@ public interface IServiceFacade
     // User methods
     bool AddUser(string username, string password);
     bool ChangeUserPassword(string username, string newPassword);
-    string FindUsersAnnouncements(string username);
+    List<AnnouncementDto> FindUsersAnnouncements(string username);
     UserDto FindUser(string username);
     bool UserLogin(string username, string password);
     bool DeleteUser(string username);
@@ -32,6 +32,7 @@ public interface IServiceFacade
 
     // Announcement methods
     bool AddAnnouncement(string title, string description, string categoryName, string subcategoryName, List<string> tagNames, string username);
+    bool ChangeAnnouncement(string title, string description, string categoryName, string subcategoryName, List<string> tagNames, string username);
     AnnouncementDto FindAnnouncement(string name);
     string FindAnnouncementByTag(string tagName);
     List<AnnouncementDto> FindAllAnnouncements();

@@ -26,11 +26,11 @@ public class UserController : ControllerBase
 
     [HttpPost("register")]
     [AllowAnonymous]
-    public ActionResult<UserResponseModel> Register([FromBody] UserRequestModel requestModel)
+    public ActionResult<string> Register([FromBody] UserRequestModel requestModel)
     {
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
-            return Forbid();
+            return Forbid("Ви вже увійшли в акаунт");
         }
         if (!ModelState.IsValid)
         {
@@ -40,15 +40,19 @@ public class UserController : ControllerBase
         {
             var dto = mapper.Map<UserDto>(requestModel);
             facade.AddUser(dto.Username, dto.Password);
-            return Ok(dto);
+            return Ok("Користувача додано");
         }
         catch (ValidationException ex)
         {
             return BadRequest(new { message = ex.Message });
         }
-        catch (Exception)
+        catch (EntityNotFoundException enf)
         {
-            return StatusCode(500, new { message = "Сталася неочікувана помилка." });
+            return BadRequest(new { message = enf.Message });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new { message = e.Message });
         }
     }
 
@@ -58,7 +62,7 @@ public class UserController : ControllerBase
     {
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
-            return Forbid();
+            return Forbid("Ви вже знаходитесь в акаунті");
         }
         if (!ModelState.IsValid)
         {
@@ -80,15 +84,23 @@ public class UserController : ControllerBase
         {
             return Unauthorized(new { message = ex.Message });
         }
-        catch (Exception)
+        catch (ValidationException ex)
         {
-            return StatusCode(500, new { message = "Сталася неочікувана помилка." });
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (EntityNotFoundException enf)
+        {
+            return BadRequest(new { message = enf.Message });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new { message = e.Message });
         }
     }
 
-    [HttpPatch("change-password")]
+    [HttpPut("change-password")]
     [Authorize]
-    public IActionResult ChangePassword([FromBody] ChangePasswordRequestModel requestModel)
+    public ActionResult<string> ChangePassword([FromBody] ChangePasswordRequestModel requestModel)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -109,13 +121,17 @@ public class UserController : ControllerBase
         {
             return BadRequest(new { message = ex.Message });
         }
-        catch (Exception)
+        catch (EntityNotFoundException enf)
         {
-            return StatusCode(500, new { message = "Сталася неочікувана помилка." });
+            return BadRequest(new { message = enf.Message });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new { message = e.Message});
         }
     }
 
-    [HttpDelete("{username}")]
+    [HttpDelete("delete/{username}")]
     [Authorize]
     public IActionResult DeleteUser(string username)
     {
@@ -123,7 +139,7 @@ public class UserController : ControllerBase
         {
             var usernameFromToken = User.Identity.Name;
             if (usernameFromToken != username)
-                return Forbid();
+                return Forbid("Спочатку увійдіть в акаунт");
 
             var deleted = facade.DeleteUser(username);
             if (!deleted)
@@ -131,9 +147,17 @@ public class UserController : ControllerBase
 
             return Ok(new { message = "Користувача видалено." });
         }
-        catch (Exception)
+        catch (ValidationException ex)
         {
-            return StatusCode(500, new { message = "Сталася неочікувана помилка." });
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (EntityNotFoundException enf)
+        {
+            return BadRequest(new { message = enf.Message });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new { message = e.Message });
         }
     }
 }
